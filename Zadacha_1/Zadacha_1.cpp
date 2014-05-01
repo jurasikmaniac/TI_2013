@@ -12,7 +12,7 @@
 #pragma warning (once : 4996)
 #define AlfabetN 256	
 
-//B Visual studio 2012 нет поддержки log2
+//B Visual studio 2012 нет поддержки log2 Но в 2013 есть
 //inline float log2(float n) {
 //	if (n==0)
 //	{
@@ -89,7 +89,7 @@ float entropy_1 (char *fn)
 				total++;            
 			}else
 			{
-				 if (strchr("-.,:!?;", ch))						//знаки припинания
+				 if (strchr("-.,:!?;", ch))						//знаки препинания
 				 {
 					ch = '.';				
 					freq[ch]++;
@@ -193,7 +193,7 @@ float entropy_2 (char *fn)
 				 }
 			
         }
-
+	//Считаем количество повторений всех пар символов
 	while((ch = fgetc(fi)) != EOF)
     {
 		//Если англ или рус алфавит
@@ -236,15 +236,16 @@ float entropy_2 (char *fn)
     }
 
 	
-
+	//Вычистляем частоту(вероятность) пар символов
 	for (int i = 0; i < AlfabetN; i++)
 	{
 		sum=0;
+		//вычисляем число повторений пар с фиксированной i буквой
 		for (int j = 0; j < AlfabetN; j++)
 		{
 			sum=sum+freq2[i][j];
 		}
-		
+		//вычисляем вероятность появление j символа после i символа
 		for (int j = 0; j < AlfabetN; j++)
 		{
 			
@@ -256,7 +257,7 @@ float entropy_2 (char *fn)
 	}
 	
 	H2=0;
-	
+	//Считаем энтропию для пар символов
 	for (int i = 0; i < AlfabetN; i++)
 	{
 		for (int j = 0; j < AlfabetN; j++)
