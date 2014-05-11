@@ -1,4 +1,4 @@
-// Zadacha_2.cpp: определяет точку входа для консольного приложения.
+п»ї// Zadacha_2.cpp: РѕРїСЂРµРґРµР»СЏРµС‚ С‚РѕС‡РєСѓ РІС…РѕРґР° РґР»СЏ РєРѕРЅСЃРѕР»СЊРЅРѕРіРѕ РїСЂРёР»РѕР¶РµРЅРёСЏ.
 //
 
 #include "stdafx.h"
@@ -8,29 +8,29 @@
 #include <clocale>
 #include <Windows.h>
 
-//Русский алфавит заглавные
-#define rusUp "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
-//Русский алфавит прописные
-#define rusDown "йцукенгшщзхъфывапролджэячсмитьбю"
-//Английский алфавит заглавные
+//Р СѓСЃСЃРєРёР№ Р°Р»С„Р°РІРёС‚ Р·Р°РіР»Р°РІРЅС‹Рµ
+#define rusUp "Р™Р¦РЈРљР•РќР“РЁР©Р—РҐРЄР¤Р«Р’РђРџР РћР›Р”Р–Р­РЇР§РЎРњРРўР¬Р‘Р®"
+//Р СѓСЃСЃРєРёР№ Р°Р»С„Р°РІРёС‚ РїСЂРѕРїРёСЃРЅС‹Рµ
+#define rusDown "Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌСЏС‡СЃРјРёС‚СЊР±СЋ"
+//РђРЅРіР»РёР№СЃРєРёР№ Р°Р»С„Р°РІРёС‚ Р·Р°РіР»Р°РІРЅС‹Рµ
 #define engUp "QWERTYUIOPASDFGHJKLZXCVBNM"
-//Английский алфавит прописные
+//РђРЅРіР»РёР№СЃРєРёР№ Р°Р»С„Р°РІРёС‚ РїСЂРѕРїРёСЃРЅС‹Рµ
 #define engDown "qwertyuiopasdfghjklzxcvbnm"
-//Количество символов в алфавите
+//РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ РІ Р°Р»С„Р°РІРёС‚Рµ
 #define n_Alfa 256
-//Длина последовательности кода
+//Р”Р»РёРЅР° РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РєРѕРґР°
 #define length_code 26
-//Указатели на открываемые файлы
+//РЈРєР°Р·Р°С‚РµР»Рё РЅР° РѕС‚РєСЂС‹РІР°РµРјС‹Рµ С„Р°Р№Р»С‹
 FILE *fi;
 FILE *fcode;
-//Количество символов в тексте
-UINT32 lengthText=0;
-//Энтропия файла
-float H		=	(float)0;
-//Максимальная энтропия файла
-float Hmax	=	(float)0;
-//Средняя длина кодового слова
-float Lmean	=	(float)0;
+//РљРѕР»РёС‡РµСЃС‚РІРѕ СЃРёРјРІРѕР»РѕРІ РІ С‚РµРєСЃС‚Рµ
+UINT32 lengthText = 0;
+//Р­РЅС‚СЂРѕРїРёСЏ С„Р°Р№Р»Р°
+float H = (float)0;
+//РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ СЌРЅС‚СЂРѕРїРёСЏ С„Р°Р№Р»Р°
+float Hmax = (float)0;
+//РЎСЂРµРґРЅСЏСЏ РґР»РёРЅР° РєРѕРґРѕРІРѕРіРѕ СЃР»РѕРІР°
+float Lmean = (float)0;
 
 
 
@@ -43,22 +43,22 @@ void	FreqOne();
 void	WriteCodeFile();
 void	entropyBinOne();
 
-//Структура для хранения данных о букве алфавита
+//РЎС‚СЂСѓРєС‚СѓСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С… Рѕ Р±СѓРєРІРµ Р°Р»С„Р°РІРёС‚Р°
 struct arrayAlfabeth
 {
-	//ASCII код символа
+	//ASCII РєРѕРґ СЃРёРјРІРѕР»Р°
 	UINT8 simbol;
-	//Частота символа в анализируемом тексте
+	//Р§Р°СЃС‚РѕС‚Р° СЃРёРјРІРѕР»Р° РІ Р°РЅР°Р»РёР·РёСЂСѓРµРјРѕРј С‚РµРєСЃС‚Рµ
 	float p;
-	//Длина кодового слова
+	//Р”Р»РёРЅР° РєРѕРґРѕРІРѕРіРѕ СЃР»РѕРІР°
 	UINT8 length;
-	//Кодовая последовательность Гилберта-Мура
+	//РљРѕРґРѕРІР°СЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ Р“РёР»Р±РµСЂС‚Р°-РњСѓСЂР°
 	UINT8 code[length_code];
 }ArrAlfa[n_Alfa];
 
 
 
-//Инициализация алфавитного массива
+//РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р°Р»С„Р°РІРёС‚РЅРѕРіРѕ РјР°СЃСЃРёРІР°
 inline void ArrayInit(arrayAlfabeth *a)
 {
 	for (size_t i = 0; i < n_Alfa; i++)
@@ -70,33 +70,33 @@ inline void ArrayInit(arrayAlfabeth *a)
 	}
 }
 
-//Установка русской локали
+//РЈСЃС‚Р°РЅРѕРІРєР° СЂСѓСЃСЃРєРѕР№ Р»РѕРєР°Р»Рё
 inline void SetLoc(UINT loc)
 {
 	//setlocale( LC_ALL, "ru_RU.cp1251" );
-	//Русская локаль
-	SetConsoleCP(loc);					
+	//Р СѓСЃСЃРєР°СЏ Р»РѕРєР°Р»СЊ
+	SetConsoleCP(loc);
 	SetConsoleOutputCP(loc);
 }
-//Рисуем пользовательское меню
+//Р РёСЃСѓРµРј РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРµ РјРµРЅСЋ
 UINT8 PaintMainMenu()
 {
 	UINT8 index;
 	system("CLS");
 	puts("########################");
-	puts("1. Гилберт-Мур");
-	puts("2. Записать кодовую последовательность в файл(code.txt)");
-	puts("3. Оценка энтропии выходной последовательности");
-	puts("4. Выход");
+	puts("1. Р“РёР»Р±РµСЂС‚-РњСѓСЂ");
+	puts("2. Р—Р°РїРёСЃР°С‚СЊ РєРѕРґРѕРІСѓСЋ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ РІ С„Р°Р№Р»(code.txt)");
+	puts("3. РћС†РµРЅРєР° СЌРЅС‚СЂРѕРїРёРё РІС‹С…РѕРґРЅРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё");
+	puts("4. Р’С‹С…РѕРґ");
 	puts("########################");
-	puts("Выбрать пункт меню №: ");
+	puts("Р’С‹Р±СЂР°С‚СЊ РїСѓРЅРєС‚ РјРµРЅСЋ в„–: ");
 	index = getchar();
 	fflush(stdin);
 	return index;
 
 
 }
-//Считаем энтропию текста, формируем кодовые слова для символом алфавита файла
+//РЎС‡РёС‚Р°РµРј СЌРЅС‚СЂРѕРїРёСЋ С‚РµРєСЃС‚Р°, С„РѕСЂРјРёСЂСѓРµРј РєРѕРґРѕРІС‹Рµ СЃР»РѕРІР° РґР»СЏ СЃРёРјРІРѕР»РѕРј Р°Р»С„Р°РІРёС‚Р° С„Р°Р№Р»Р°
 void FreqOne()
 {
 	UINT8 ch = 0;
@@ -105,74 +105,74 @@ void FreqOne()
 	H = 0;
 	Lmean = 0;
 	readFilename();
-	
-	
-	
+
+
+
 	ArrayInit(ArrAlfa);
-	
+
 	while (!feof(fi))
 	{
-		
-			fscanf_s(fi, "%c", &ch);
-			if (feof(fi))
-			{
-				break;
-			}
-			if (strchr(rusUp, ch))
-			{
-				ch = ch - 0xC0 + 0xE0;
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-			else
-			if (strchr(rusDown, ch))
-			{
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-			else
-			if (strchr(engUp, ch))
-			{
-				ch = ch - 'A' + 'a';
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-			else
-			if (strchr(engDown, ch))
-			{
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-			else
-			if (strchr("-.,:!?;", ch))
-			{
-				ch = '.';
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-			else
-			if (ch == ' ')
-			{
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-			else
-			if (ch == 0xA8 || ch == 0xB8)
-			{
-				ch = 0xE5;
-				ArrAlfa[ch].p += 1.0;
-				lengthText++;
-			}
-		
+
+		fscanf_s(fi, "%c", &ch);
+		if (feof(fi))
+		{
+			break;
+		}
+		if (strchr(rusUp, ch))
+		{
+			ch = ch - 0xC0 + 0xE0;
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+		else
+		if (strchr(rusDown, ch))
+		{
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+		else
+		if (strchr(engUp, ch))
+		{
+			ch = ch - 'A' + 'a';
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+		else
+		if (strchr(engDown, ch))
+		{
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+		else
+		if (strchr("-.,:!?;", ch))
+		{
+			ch = '.';
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+		else
+		if (ch == ' ')
+		{
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+		else
+		if (ch == 0xA8 || ch == 0xB8)
+		{
+			ch = 0xE5;
+			ArrAlfa[ch].p += 1.0;
+			lengthText++;
+		}
+
 	}
 	fclose(fi);
-	
+
 	printf_s("The file was closed\n");
 	for (int i = 0; i < n_Alfa; i++)
 	{
 
 		if (ArrAlfa[i].p != (float)0)
-		{			
+		{
 			ArrAlfa[i].p = ArrAlfa[i].p / lengthText;
 			printf_s("P[%c] = %1.4f\n", i, ArrAlfa[i].p);
 			H = H + ArrAlfa[i].p * log2(ArrAlfa[i].p);
@@ -181,11 +181,11 @@ void FreqOne()
 	}
 	Hmax = log2((float)K);
 	if (Hmax == 0)Hmax = 1;
-	printf_s("Всего символов в файле: %d\n", lengthText);
-	printf("Всего символов в алфавите: %d\n", K);
-	printf("Энтропия файла: %3.3f\n", (-1)*H);
-	printf("Максимальная Энтропия файла: %3.3f\n", Hmax);
-	printf("Избыточность текста составила: %3.3f\n", (float)1 + H / Hmax);
+	printf_s("Р’СЃРµРіРѕ СЃРёРјРІРѕР»РѕРІ РІ С„Р°Р№Р»Рµ: %d\n", lengthText);
+	printf("Р’СЃРµРіРѕ СЃРёРјРІРѕР»РѕРІ РІ Р°Р»С„Р°РІРёС‚Рµ: %d\n", K);
+	printf("Р­РЅС‚СЂРѕРїРёСЏ С„Р°Р№Р»Р°: %3.3f\n", (-1)*H);
+	printf("РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ Р­РЅС‚СЂРѕРїРёСЏ С„Р°Р№Р»Р°: %3.3f\n", Hmax);
+	printf("РР·Р±С‹С‚РѕС‡РЅРѕСЃС‚СЊ С‚РµРєСЃС‚Р° СЃРѕСЃС‚Р°РІРёР»Р°: %3.3f\n", (float)1 + H / Hmax);
 
 	Gilbert_Mur();
 
@@ -194,34 +194,34 @@ void FreqOne()
 	{
 
 		if (ArrAlfa[i].p != (float)0)
-		{			
+		{
 			printf_s("P[%c] = %1.4f kod = ", i, ArrAlfa[i].p);
 			for (int j = 0; j<ArrAlfa[i].length; j++) printf("%c", ArrAlfa[i].code[j]);
 			printf_s("\n");
 		}
 	}
-	printf("Средняя длина кодового слова: %3.3f\n", Lmean);
-	printf("Избыточность кодирования составила: %3.3f\n", Lmean - (-1.0)*H);
+	printf("РЎСЂРµРґРЅСЏСЏ РґР»РёРЅР° РєРѕРґРѕРІРѕРіРѕ СЃР»РѕРІР°: %3.3f\n", Lmean);
+	printf("РР·Р±С‹С‚РѕС‡РЅРѕСЃС‚СЊ РєРѕРґРёСЂРѕРІР°РЅРёСЏ СЃРѕСЃС‚Р°РІРёР»Р°: %3.3f\n", Lmean - (-1.0)*H);
 	system("pause");
 }
-//Сам Гилберт-Мур
+//РЎР°Рј Р“РёР»Р±РµСЂС‚-РњСѓСЂ
 void Gilbert_Mur()
 {
 	float q[n_Alfa], pr = 0.0;
-	
-	q[0] = ArrAlfa[0].p / 2; 
+
+	q[0] = ArrAlfa[0].p / 2;
 	ArrAlfa[0].length = (UINT8)(-log2(ArrAlfa[0].p) + 2);
 	pr = ArrAlfa[0].p;
 	for (int i = 1; i<n_Alfa; i++)
 	{
-		if (ArrAlfa[i].p!=(float)0)
+		if (ArrAlfa[i].p != (float)0)
 		{
 			q[i] = pr + ArrAlfa[i].p / 2;
 			ArrAlfa[i].length = (UINT8)(-log2(ArrAlfa[i].p) + 2);
 			pr += ArrAlfa[i].p;
 		}
 	}
-	
+
 	for (int i = 0; i < n_Alfa; i++)
 	{
 		if (ArrAlfa[i].p != (float)0)
@@ -229,15 +229,15 @@ void Gilbert_Mur()
 			for (int j = 0; j<ArrAlfa[i].length; j++)
 			{
 				q[i] *= 2.0;
-				ArrAlfa[i].code[j] = (int)(q[i])+0x30;//превратим 0 и 1 в символы ASCII, для удобства читаемости выходной последовательности
-				if (q[i]>=1.0) q[i]--;	//Если условие оставить условие > то при  q=0.75 и p = 0.009 происходит кодировние 11222222!!!!
-			}							//В методичке указано >
+				ArrAlfa[i].code[j] = (int)(q[i]) + 0x30;//РїСЂРµРІСЂР°С‚РёРј 0 Рё 1 РІ СЃРёРјРІРѕР»С‹ ASCII, РґР»СЏ СѓРґРѕР±СЃС‚РІР° С‡РёС‚Р°РµРјРѕСЃС‚Рё РІС‹С…РѕРґРЅРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё
+				if (q[i] >= 1.0) q[i]--;	//Р•СЃР»Рё СѓСЃР»РѕРІРёРµ РѕСЃС‚Р°РІРёС‚СЊ СѓСЃР»РѕРІРёРµ > С‚Рѕ РїСЂРё  q=0.75 Рё p = 0.009 РїСЂРѕРёСЃС…РѕРґРёС‚ РєРѕРґРёСЂРѕРІРЅРёРµ 11222222!!!!
+			}							//Р’ РјРµС‚РѕРґРёС‡РєРµ СѓРєР°Р·Р°РЅРѕ >
 		}
 	}
-	
-	
+
+
 	for (int i = 0; i<n_Alfa; i++)
-	{		
+	{
 		Lmean += ArrAlfa[i].length*ArrAlfa[i].p;
 	}
 }
@@ -248,11 +248,11 @@ void WriteCodeFile()
 	errno_t err;
 	UINT8 ch = 0;
 	readFilename();
-		
+
 	err = fopen_s(&fcode, "code.txt", "wb");
 	if (err == 0)
 	{
-		printf_s("The file CODE.txt was opened\n");		
+		printf_s("The file CODE.txt was opened\n");
 	}
 	else
 	{
@@ -271,7 +271,7 @@ void WriteCodeFile()
 		{
 			ch = ch - 0xC0 + 0xE0;
 			fwrite(ArrAlfa[ch].code, ArrAlfa[ch].length, 1, fcode);
-			
+
 		}
 		else
 		if (strchr(rusDown, ch))
@@ -309,35 +309,35 @@ void WriteCodeFile()
 
 	}
 	numclosed = _fcloseall();
-	
+
 	system("pause");
 }
 
 
-//Безопасное открытие файла на чтение
+//Р‘РµР·РѕРїР°СЃРЅРѕРµ РѕС‚РєСЂС‹С‚РёРµ С„Р°Р№Р»Р° РЅР° С‡С‚РµРЅРёРµ
 void readFilename()
 {
-	errno_t err;	
+	errno_t err;
 	char FileName[200];
-	fflush(stdin); 
-	system("DIR /a:-d"); 
-	puts("Введите имя файла\n"); 
+	fflush(stdin);
+	system("DIR /a:-d");
+	puts("Р’РІРµРґРёС‚Рµ РёРјСЏ С„Р°Р№Р»Р°\n");
 	while (true)
 	{
-		gets_s(FileName,200);
+		gets_s(FileName, 200);
 		err = fopen_s(&fi, FileName, "r");
 		if (err == 0)
 		{
-			printf_s("The file ""%s"" was opened\n",FileName);
+			printf_s("The file ""%s"" was opened\n", FileName);
 			break;
 		}
 		else
 		{
-			printf_s("The file ""%s"" was not opened, try again\n",FileName);
-		}		
+			printf_s("The file ""%s"" was not opened, try again\n", FileName);
+		}
 	}
 }
-//Подсчет энтропии выходной последовательности в файле code.txt Алфавит={0,1}
+//РџРѕРґСЃС‡РµС‚ СЌРЅС‚СЂРѕРїРёРё РІС‹С…РѕРґРЅРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РІ С„Р°Р№Р»Рµ code.txt РђР»С„Р°РІРёС‚={0,1}
 void entropyBinOne()
 {
 	errno_t err;
@@ -359,7 +359,7 @@ void entropyBinOne()
 	{
 		printf_s("The file code.txt was not opened, try again\n");
 	}
-	
+
 	while (!feof(fi))
 	{
 
@@ -371,20 +371,20 @@ void entropyBinOne()
 		ch = ch - 0x30;
 		p1[ch]++;
 		total++;
-	}	
+	}
 
 	p1[0] = p1[0] / total;
-	printf_s("p[0]=%1.4f\n",p1[0]);
+	printf_s("p[0]=%1.4f\n", p1[0]);
 	p1[1] = p1[1] / total;
 	printf_s("p[1]=%1.4f\n", p1[1]);
 	entr = p1[0] * log2f(p1[0]) + p1[1] * log2f(p1[1]);
 	entr = entr*(float)(-1);
-	
+
 	ch = 0;
 	rewind(fi);
 	fscanf_s(fi, "%c", &lastch);
 	lastch = lastch - 0x30;
-	
+
 	while (!feof(fi))
 	{
 		fscanf_s(fi, "%c", &ch);
@@ -416,25 +416,25 @@ void entropyBinOne()
 			if (p2[i][j]>0)
 			{
 				entr2 = entr2 + p1[i] * p2[i][j] * log2(p2[i][j]);
-				printf("P2[%c][%c]= %f\n", i+0x30, j+0x30, p2[i][j]);
+				printf("P2[%c][%c]= %f\n", i + 0x30, j + 0x30, p2[i][j]);
 			}
 		}
 	}
 	entr2 = entr2*(float)(-1);
 
-	printf_s("Энтропия кодовой последовательности(частоты одиночных символов) равна = %1.4f\n", entr);
-	printf_s("Энтропия кодовой последовательности(частоты пар символов) равна = %1.4f\n", entr2);
+	printf_s("Р­РЅС‚СЂРѕРїРёСЏ РєРѕРґРѕРІРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё(С‡Р°СЃС‚РѕС‚С‹ РѕРґРёРЅРѕС‡РЅС‹С… СЃРёРјРІРѕР»РѕРІ) СЂР°РІРЅР° = %1.4f\n", entr);
+	printf_s("Р­РЅС‚СЂРѕРїРёСЏ РєРѕРґРѕРІРѕР№ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё(С‡Р°СЃС‚РѕС‚С‹ РїР°СЂ СЃРёРјРІРѕР»РѕРІ) СЂР°РІРЅР° = %1.4f\n", entr2);
 	system("pause");
 	fclose(fi);
 }
 
-//Тело основной функции программы
+//РўРµР»Рѕ РѕСЃРЅРѕРІРЅРѕР№ С„СѓРЅРєС†РёРё РїСЂРѕРіСЂР°РјРјС‹
 int _tmain(int argc, _TCHAR* argv[])
-{	
+{
 	int numclosed;
 	SetLoc(1251);
-	
-	
+
+
 	while (true)
 	{
 		switch (PaintMainMenu())
@@ -442,13 +442,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		case '1':FreqOne();			break;
 		case '2':WriteCodeFile();	break;
 		case '3':entropyBinOne();	break;
-		case '4':numclosed = _fcloseall();return 0;			
+		case '4':numclosed = _fcloseall(); return 0;
 		default:	break;
 		}
 	}
 
-	
+
 	numclosed = _fcloseall();
 	return 0;
 }
-
