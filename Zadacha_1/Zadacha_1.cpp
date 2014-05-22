@@ -1,5 +1,5 @@
 ﻿// Zadacha_1.cpp: определяет точку входа для консольного приложения.
-//
+
 
 #include "stdafx.h"
 
@@ -245,21 +245,42 @@ float entropy_2(char *fn)
 
 
 	//Вычистляем частоту(вероятность) пар символов
-	for (int i = 0; i < AlfabetN; i++)
-	{
-		sum = 0;
-		//вычисляем число повторений пар с фиксированной i буквой
+	//for (int i = 0; i < AlfabetN; i++)
+	//{
+	//	sum = 0;
+	//	//вычисляем число повторений пар с фиксированной i буквой
+	//	for (int j = 0; j < AlfabetN; j++)
+	//	{
+	//		sum = sum + freq2[i][j];
+	//	}
+	//	//вычисляем вероятность появление j символа после i символа
+	//	for (int j = 0; j < AlfabetN; j++)
+	//	{
+
+
+	//		freq2[i][j] = freq2[i][j] / sum;
+	//		//if(freq2[i][j]>0)	printf("P2[%c][%c]= %f\n",i,j,freq2[i][j]);
+
+	//	}
+	//}
+	sum = 0;
+	for (int i = 0; i < AlfabetN; i++)	
+	{		
 		for (int j = 0; j < AlfabetN; j++)
 		{
+
+
 			sum = sum + freq2[i][j];
+			//if(freq2[i][j]>0)	printf("P2[%c][%c]= %f\n",i,j,freq2[i][j]);
+
 		}
-		//вычисляем вероятность появление j символа после i символа
+	}
+	for (int i = 0; i < AlfabetN; i++)
+	{		
 		for (int j = 0; j < AlfabetN; j++)
 		{
-
-
 			freq2[i][j] = freq2[i][j] / sum;
-			//if(freq2[i][j]>0)	printf("P2[%c][%c]= %f\n",i,j,freq2[i][j]);
+			if(freq2[i][j]>0)	printf("P2[%c][%c]= %f\n",i,j,freq2[i][j]);
 
 		}
 	}
@@ -273,12 +294,12 @@ float entropy_2(char *fn)
 
 			if (freq2[i][j]>0)
 			{
-				H2 = H2 + res.freq[i] * freq2[i][j] * log2(freq2[i][j]);
+				H2 = H2 + freq2[i][j] * log2(freq2[i][j]);
 			}
 		}
 	}
 
-
+	H2 /= 2;
 	printf("Энтропия файла для пар символов: %3.3f\n", (-1)*H2);
 	printf("Максимальная Энтропия файла: %3.3f\n", res.Hmax);
 	if (res.Hmax == 0)res.Hmax = 1;
